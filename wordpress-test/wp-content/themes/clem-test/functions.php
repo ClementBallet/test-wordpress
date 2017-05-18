@@ -7,7 +7,7 @@
  */
 
 /**
- * On définit la version de notre style et on réutilise la variable CL_VERSION dans les fonctions wp_enqueue_style.
+ * On définit la version de notre thème et on réutilise la variable CL_VERSION dans les fonctions wp_enqueue_style.
  * Permet de ne pas avoir à le changer manuellement dans fonctions à chaque changement de version.
  */
 
@@ -39,11 +39,13 @@ define('CL_VERSION','1.0.0');
     wp_enqueue_style('cl_custom', get_template_directory_uri().'/style.css', array('cl_bootstrap-core'), CL_VERSION, 'all');
 
     // Chargement des scripts
-    wp_enqueue_script('tether-js', get_template_directory_uri().'/js/tether.min.js', array('jquery'), CL_VERSION, true );
+    // wp_enqueue_script('tether-js', get_template_directory_uri().'/js/tether.min.js', array(), CL_VERSION, true );
+    //
+    // wp_enqueue_script('tooltip-js', get_template_directory_uri().'/js/bootstrap-tooltip.js', array('tether-js'), CL_VERSION, true );
 
-    wp_enqueue_script('bootstrap-js', get_template_directory_uri().'/js/bootstrap.min.js', array('jquery', 'tether-js'), CL_VERSION, true);
+    wp_enqueue_script('bootstrap-js', get_template_directory_uri().'/js/bootstrap.min.js', array('jquery'), CL_VERSION, true);
 
-    wp_enqueue_script('cl_script', get_template_directory_uri().'/js/clem-test.js', array('jquery', 'tether-js', 'bootstrap-js'), CL_VERSION, true);
+    wp_enqueue_script('cl_script', get_template_directory_uri().'/js/clem-test.js', array('jquery', 'bootstrap-js'), CL_VERSION, true);
   }
 
   add_action('wp_enqueue_scripts', 'cl_scripts');
