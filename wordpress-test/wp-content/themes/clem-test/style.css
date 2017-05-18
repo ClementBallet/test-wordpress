@@ -1,0 +1,12 @@
+/*
+Theme Name: Clem-test
+Author: Clément Ballet
+Author URI : http://vps330061.ovh.net/site/
+Description: Test d'un thème wordpress de a à z
+Version: 1.0
+Text Domain: Clem-test
+*/
+
+body {
+  background-color: antiquewhite;
+}
