@@ -10,3 +10,7 @@ Text Domain: Clem-test
 body {
   background-color: antiquewhite;
 }
+
+footer {
+  background-color: darkgrey;
+}

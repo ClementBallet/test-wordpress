@@ -1,58 +1,27 @@
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-  <head>
 
-    <meta charset= "<?php bloginfo('charset'); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="lorem ipsum">
-    <!-- Fonction wp_head() qui appelle toutes les balises du head (meta, link...) -->
-    <?php wp_head(); ?>
+<?php get_header(); ?>
 
-  </head>
-
-  <body>
-
-    <header>
-      <!-- Static navbar -->
-      <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Home</a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="#">Menu 1</a></li>
-              <li><a href="#">Menu 2</a></li>
-              <li><a href="#">Menu 3</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </nav> <!-- EOF navbar -->
-    </header> <!-- EOF header -->
-
-    <div class="container">
-      <div class="jumbotron">
-        <h1>Site Test</h1>
-      </div>
-    </div> <!-- EOF container -->
     <section>
       <div class="container">
         <?php if(have_posts()): ?> <!-- Boucle qui vérifie l'existence d'articles -->
-          <?php while(have_posts()): the_post(); ?> <!-- Invoque l'itération de l'article en cours -->
-            <div class="row">
+          <?php while(have_posts()): the_post(); // Invoque l'itération de l'article en cours ?>
+            <div class="row m-dw-30">
               <div class="col-xs-2">
-                <?php the_post_thumbnail() ?> <!-- Affiche l'image à la une de l'article -->
+                <?php // La vignette : on récupère les URL des thumbnail (image à la une des articles)
+                  if($thumbnail_html = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'thumbnail')) : // Stockage du tableau où est contenue l'URL de l'image thumbnail dans une variable
+                    $thumbnail_src = $thumbnail_html[0]; // Stockage de l'emplacement exact de l'URL
+                ?>
+                <img class="img-responsive img-thumbnail" src="<?php echo $thumbnail_src; ?>" alt=""> <!-- Injection de l'URL dans le thème avec la gestion responsive de l'image -->
+                <?php endif; ?>
+
               </div>
               <div class="col-xs-10">
-                <h1><?php the_title(); ?></h1> <!-- Affiche le titre de l'article
-                echo "<br>"; -->
-                <?php the_excerpt() ?> <!-- Affiche le corps de l'article -->
+                <h1>
+                  <a href="<?php the_permalink(); ?>"> <!-- Lien du titre de l'article vers l'article -->
+                    <?php the_title(); ?><!-- Affiche le titre de l'article -->
+                  </a>
+                </h1>
+                <?php the_excerpt() ?><!-- Affiche le corps de l'article -->
               </div>
             </div><!-- EOF row -->
           <?php endwhile; ?><!-- EOF boucle posts -->
@@ -64,10 +33,6 @@
           </div>
         <?php endif; ?>
       </div><!-- EOF container -->
-    </section>
+    </section><!-- EOF section -->
 
-    <!-- Fonction wp_footer() qui appelle les feuilles javascript à la fin du body -->
-    <?php wp_footer(); ?>
-
-  </body>
-</html>
+<?php get_footer(); ?>

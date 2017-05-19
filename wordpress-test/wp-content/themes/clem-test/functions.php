@@ -11,7 +11,7 @@
  * Permet de ne pas avoir à le changer manuellement dans fonctions à chaque changement de version.
  */
 
-define('CL_VERSION','1.0.0');
+define('CL_VERSION','1.0.4');
 
 /**
  * Fonction wp_enqueue_style() qui appelle les feuilles de styles.
@@ -34,18 +34,15 @@ define('CL_VERSION','1.0.0');
 
   function cl_scripts(){
     // Chargement des styles
-    wp_enqueue_style('cl_bootstrap-core', get_template_directory_uri().'/css/bootstrap.min.css', array(), CL_VERSION, 'all');
+    //wp_enqueue_style('cl_bootstrap-core', get_template_directory_uri().'/css/bootstrap.min.css', array(), CL_VERSION, 'all');
 
-    wp_enqueue_style('cl_custom', get_template_directory_uri().'/style.css', array('cl_bootstrap-core'), CL_VERSION, 'all');
+    wp_enqueue_style('cl_custom', get_template_directory_uri().'/style.css', array(), CL_VERSION, 'all');
 
     // Chargement des scripts
-    // wp_enqueue_script('tether-js', get_template_directory_uri().'/js/tether.min.js', array(), CL_VERSION, true );
+
+    // wp_enqueue_script('bootstrap-js', get_template_directory_uri().'/js/bootstrap.min.js', array('jquery', 'tether-js'), CL_VERSION, true);
     //
-    // wp_enqueue_script('tooltip-js', get_template_directory_uri().'/js/bootstrap-tooltip.js', array('tether-js'), CL_VERSION, true );
-
-    wp_enqueue_script('bootstrap-js', get_template_directory_uri().'/js/bootstrap.min.js', array('jquery'), CL_VERSION, true);
-
-    wp_enqueue_script('cl_script', get_template_directory_uri().'/js/clem-test.js', array('jquery', 'bootstrap-js'), CL_VERSION, true);
+    // wp_enqueue_script('cl_script', get_template_directory_uri().'/js/clem-test.js', array('jquery', 'bootstrap-js'), CL_VERSION, true);
   }
 
   add_action('wp_enqueue_scripts', 'cl_scripts');
@@ -75,6 +72,10 @@ define('CL_VERSION','1.0.0');
    remove_filter('the_content', 'wptexturize');
    // Affiche la balise "title" dans le head (empêche les conflits avec certains systèmes SEO)
    add_theme_support('title-tag');
+   // Active la gestion des menus Bootstrap
+   require_once('includes/wp-bootstrap-navwalker.php');
+   // Active la gestion des menus ("principal" est le nom du menu qui apparait dans l'administration)
+   register_nav_menus(array('primary' => 'principal'));
  }
 
  add_action('after_setup_theme', 'cl_setup');
