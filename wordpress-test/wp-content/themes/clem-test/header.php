@@ -4,7 +4,26 @@
 
     <meta charset= "<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="lorem ipsum">
+
+    <?php if(is_home()): ?>
+      <meta name="description" content="Page des articles du blog">
+    <?php endif; ?>
+
+    <?php if(is_front_page()): ?>
+      <meta name="description" content="Page d'accueil statique du blog">
+    <?php endif; ?>
+
+    <?php if(is_page() && !is_front_page()): ?>
+      <meta name="description" content="Contenu de type page">
+    <?php endif; ?>
+
+    <?php if(is_category()): ?>
+      <meta name="description" content="Liste de articles pour la catégorie <?php echo single_cat_title('', false); ?>, lorem">
+    <?php endif; ?>
+
+    <?php if(is_tag()): ?>
+      <meta name="description" content="Liste de articles reliés avec l'étiquette <?php echo single_tag_title('', false); ?>, lorem">
+    <?php endif; ?>
 
     <!-- Fonction wp_head() qui appelle toutes les balises du head (meta, link...) -->
     <?php wp_head(); ?>

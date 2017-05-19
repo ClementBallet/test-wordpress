@@ -96,3 +96,13 @@ function cl_give_me_meta_01($date1, $date2, $cat, $tags) {
 
   return $chaine;
 }
+
+/**
+ *   Enlève les 3 petits points à la suite des articles sur la page d'accueil et le remplace par "Lire la suite"
+ */
+
+function cl_excerpt_more($more) {
+  return '<a class="more-link" href="' . get_permalink() .'">' . ' [lire la suite]' . '</a>';
+}
+
+add_filter('excerpt_more', 'cl_excerpt_more');
