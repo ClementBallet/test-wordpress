@@ -4,15 +4,22 @@
     <section>
       <div class="container">
         <?php if(have_posts()): ?> <!-- Boucle qui vérifie l'existence d'articles -->
-          <?php while(have_posts()): the_post(); // Invoque l'itération de l'article en cours
-            $date = sprintf('<time class="entry-date" datetime="%1$s">%2$s<time>', esc_attr(get_the_date('c')), esc_html(get_the_date()));
-          ?>
+          <?php while(have_posts()): the_post(); // Invoque l'itération de l'article en cours ?>
             <div class="row m-dw-30">
               <div class="col-xs-12">
                 <h1>
                   <?php the_title(); ?><!-- Affiche le titre de l'article -->
                 </h1>
-                <p>Publié le <?php echo $date; ?> dans la catégorie <?php the_category(', '); ?></p>
+                <p>
+                  <?php
+                    echo cl_give_me_meta_01(
+                      esc_attr(get_the_date('c')), // Date format ISO
+                      esc_html(get_the_date()), // Date format normal
+                      get_the_category_list(', '), // Liste des catégories sous forme de lien
+                      get_the_tag_list('', ', ') // Affiche les étiquettes (tags)
+                    );
+                  ?>
+                </p>
                 <?php the_content() ?><!-- Affiche le corps de l'article -->
               </div>
             </div><!-- EOF row -->
