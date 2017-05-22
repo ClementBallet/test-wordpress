@@ -47,14 +47,62 @@ function cl_scripts(){
 add_action('wp_enqueue_scripts', 'cl_scripts');
 
 /**
- * Fonction cl_admin_scripts() qui permet de changer les feuilles de styles via le panneau administration de Wordpress.
+ *   Chargement des styles/scripts dashboard
  */
 
-function cl_admin_scripts() {
-  wp_enqueue_style('cl_admin_bootstrap-core', get_template_directory_uri() . '/css/bootstrap.min.css', array(), CL_VERSION, 'all');
+function cl_admin_init() {
+  // Action 1
+  function cl_admin_scripts() {
+    // Chargement des styles admin
+    wp_enqueue_style('cl_admin_bootstrap-core', get_template_directory_uri() . '/css/bootstrap.min.css', array(), CL_VERSION, 'all');
+
+    // Chargement des scripts admin
+    wp_enqueue_media();  // Inclusion du media uploader de WP
+    wp_enqueue_script('cl_admin_init', get_template_directory_uri() . '/js/admin-options.js', array(), CL_VERSION, true);
+  }
+
+  add_action('admin_enqueue_scripts', 'cl_admin_scripts');
+
+  // Action 2
+  include('includes/save-options-page.php');
+  add_action('admin_post_cl_save_options', 'cl_save_options');
 }
 
-add_action('admin_init', 'cl_admin_scripts');
+add_action('admin_init', 'cl_admin_init');
+
+/**
+ *    Activation des options
+ */
+
+function cl_activ_options() {
+  $theme_opts = get_option('cl_opts');
+  if(!$theme_opts) {
+    $opts = array(
+      'image_01_url' => '',
+      "legend_01"    => ''
+    );
+    add_option('cl_opts', $opts);
+  }
+}
+
+add_action('after_switch_theme', 'cl_activ_options');
+
+/**
+ *    Menu options du thème
+ */
+
+function cl_admin_menus() {
+  add_menu_page(
+    'Test Wordpress Options', // Titre de l'onglet
+    'Options du thème', // Titre du menu dans le panneau d'admnistration de WP
+    'publish_pages', // Voir "Roles & capabilities" dans le codex de WP. Ici nous avons donné les droits à "editor".
+    'cl_theme_opts', // Slug qui apparait dans l'URL
+    'cl_build_options_page' // Fonction qui se trouve dans /includes/build-options-page.php
+  );
+  include('includes/build-options-page.php');
+}
+
+add_action('admin_menu', 'cl_admin_menus');
 
  /**
   *
