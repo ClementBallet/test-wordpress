@@ -1,4 +1,5 @@
 <?php get_header(); ?>
+<?php get_template_part('slider', 'home'); // Appel du slideshow carousel ?> 
 <?php
   $args_blog = array(
     'post-type' => 'post',

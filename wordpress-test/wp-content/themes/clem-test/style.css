@@ -32,6 +32,11 @@ dl.gallery-item img.attachment-thumbnail {
 
 .panel img { margin-bottom: 15px; }
 
+.jumbotron {
+  padding-top: 24px;
+  padding-bottom: 12px;
+}
+
 footer {
   background-color: #CDDDC4;
   margin-top: 20px;
@@ -72,3 +77,19 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+/* Style de la pagination */
+.cl-pagination a, .cl-pagination span {
+  display: inline-block;
+  padding: 0 25px;
+  margin-bottom: 20px;
+}
+
+.cl-pagination a.prev { padding-left: 0;}
+
+.cl-pagination span.page-numbers.current {
+  background-color: #333;
+  color: #ddd;
+}
+
+.center-block { text-align: center; }

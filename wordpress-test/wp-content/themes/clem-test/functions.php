@@ -11,7 +11,7 @@
  * Permet de ne pas avoir à le changer manuellement dans fonctions à chaque changement de version.
  */
 
-define('CL_VERSION','1.0.8');
+define('CL_VERSION','1.1.0');
 
 /**
  * Fonction wp_enqueue_style() qui appelle les feuilles de styles.
@@ -131,6 +131,8 @@ add_action('widgets_init', 'cl_widgets_init');
 function cl_setup() {
  // Ajoute la possibilité de mettre une "image à la une" ou "image mise en avant" (post-thumbnails) dans les articles
  add_theme_support('post-thumbnails');
+ // Créé une taille personnalisée pour les images du slideshow carousel
+ add_image_size('front-slider', 1140, 420, true);
  // Supprime la version de WordPress dans le code visible par les utilisateurs (risques de piratage)
  remove_action('wp_head', 'wp_generator');
  // Supprime les guillemets à la française
@@ -188,3 +190,87 @@ function cl_excerpt_more($more) {
 }
 
 add_filter('excerpt_more', 'cl_excerpt_more');
+
+/**
+ *   Slider page d'accueil
+ */
+
+function cl_slider_init() {
+  $labels = array( // Personnalisation des labels du Carousel dans le panneau admin
+    'name'               => 'Images Carousel Accueil',
+    'singular_name'      => 'Image accueil',
+    'add_new'            => 'Ajouter une image',
+    'add_new_item'       => 'Ajouter une image accueil',
+    'edit_item'          => 'Modifier une image accueil',
+    'new_item'           => 'Nouveau',
+    'all_items'          => 'Voir la liste',
+    'view_item'          => 'Voir l\'élément',
+    'search_item'        => 'Chercher une image accueil',
+    'not_found'          => 'Aucun élément trouvé',
+    'not_found_in_trash' => 'Aucun élément dans la corbeille',
+    'menu_name'          => 'Slider Frontal'
+  );
+
+  $args = array(
+    'labels'              => $labels,
+    'public'              => true,
+    'publicly_queryable'  => true,
+    'show_ui'             => true,
+    'show_in_menu'        => true,
+    'query_var'           => true,
+    'rewrite'             => true,
+    'capability_type'     => 'post',
+    'has_archive'         => false,
+    'hierarchical'        => false,
+    'menu_position'       => 20,
+    'menu_icon'           => get_stylesheet_directory_uri() . '/assets/slideshow.png',
+    'publicly_queryable'  => false,
+    'exclude_from_search' => true,
+    'supports'            => array('title', 'page-attributes', 'thumbnail') // Personnalisation des labels dans l'éditeur de texte du Carousel
+  );
+
+register_post_type('cl_slider', $args);
+}
+
+add_action('init', 'cl_slider_init');
+
+/**
+ *   Ajout de l'image et ordre dans la colonne admin pour le slider
+ */
+
+add_filter('manage_edit-cl_slider_columns', 'cl_col_change'); // Change nom des colonnes
+
+function cl_col_change($columns) {
+  $columns['cl_slider_image_order'] = "Ordre";
+  $columns['cl_slider_image'] = "Image affichée";
+
+  return $columns;
+}
+
+add_action('manage_cl_slider_posts_custom_column', 'cl_content_show', 10, 2); // Affiche le contenu
+
+function cl_content_show($column, $post_id) {
+  global $post;
+
+  if($column == 'cl_slider_image') {
+    echo the_post_thumbnail(array(200,100));
+  }
+  if($column == 'cl_slider_image_order') {
+    echo $post->menu_order;
+  }
+}
+
+/**
+ *   Tri auto sur l'ordre dans la colonne admin pour le slider
+ */
+
+function cl_change_slides_order($query) {
+  global $post_type, $pagenow;
+
+  if($pagenow == 'edit.php' && $post_type == 'cl_slider') {
+    $query->query_vars['orderby'] = 'menu_order';   // Voir dans le codex WP_Query
+    $query->query_vars['order'] = 'asc';            // Ordre croissant. Voir dans le codex WP_Query
+  }
+}
+
+add_action('pre_get_posts', 'cl_change_slides_order');

@@ -14,7 +14,31 @@
         </div>
       </div>
     <?php endif; ?>
-    <?php wp_pagenavi(); ?><!-- Ajout de l'extension WP-pagenavi pour naviguer depuis la page d'accueil -->
+
+    <div class="row">
+      <?php // Ajout de la pagination
+        global $wp_query;
+        $big = 999999999;
+        $total_pages = $wp_query->max_num_pages;
+
+        if($total_pages > 1):
+      ?>
+        <div class="col-xs-12 cl-pagination center-block">
+          <?php
+            echo paginate_links(array(
+              'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+              'format'    => '/page/%#%',  // Format des permaliens
+              'current'   => max(1, get_query_var('paged')),
+              'total'     => $total_pages,
+              'prev_next' => True,  // True pour pouvoir définir le texte qui se trouve dans la pagination
+              'prev_next' => '« Page précédente',
+              'next_text' => 'Page suivante »'
+            ));
+          ?>
+        </div><!-- EOF col-xs-12 cl-pagination -->
+      <?php endif; ?>
+    </div><!-- EOF row -->
+
   </div><!-- EOF container -->
 </section><!-- EOF section -->
 
