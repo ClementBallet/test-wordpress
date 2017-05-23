@@ -7,10 +7,68 @@ Version: 1.0
 Text Domain: Clem-test
 */
 
-body {
-  background-color: antiquewhite;
+.m-up-reset { margin-top: 0; }
+
+.m-dw-30 { margin-bottom: 30px; }
+
+.aligncenter {
+  margin: auto;
+  display: block;
 }
 
+.wp-caption { width: 100%!important; }
+
+.wp-caption a {
+  display: block;
+  max-width: 768px;
+  margin: auto;
+}
+
+/* Galeries d'image responsive dans les articles */
+dl.gallery-item img.attachment-thumbnail {
+  height: auto;
+  max-width: 100%;
+}
+
+.panel img { margin-bottom: 15px; }
+
 footer {
-  background-color: darkgrey;
+  background-color: #CDDDC4;
+  margin-top: 20px;
+  padding-top: 25px;
+  padding-bottom: 100px;
+}
+
+footer .wrap-widget > .inside-widget {
+  background-color: #BAC6BC;
+  border-radius: 3%;
+  padding: 2% 5%;
+  min-height: 270px;
+  margin-bottom: 15px;
+}
+
+footer .wrap-widget > .inside-widget > h2 {
+  margin-top: 12px;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid black;
+}
+
+footer table#wp-calendar { width: 100%; }
+
+footer table#wp-calendar caption {
+  text-align: center;
+  border-bottom: 1px solid #cdcdcd;
+  padding-bottom: 2px;
+  padding-top: 0;
+  margin-bottom: 6px;
+}
+
+footer table#wp-calendar tfoot tr td { padding-top: 10px; }
+
+/* Rends les images responsive */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }

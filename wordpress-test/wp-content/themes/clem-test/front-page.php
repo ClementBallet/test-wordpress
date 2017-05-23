@@ -17,7 +17,7 @@
                 <h2><?php the_title(); ?></h2>
               </div>
               <div class="panel-body">
-                <?php the_post_thumbnail('medium', array('class' => 'img-responsive center-block')); ?>
+                <?php the_post_thumbnail('medium', array('class' => 'img-responsive aligncenter')); ?>
                 <?php the_excerpt(); ?>
               </div>
               <div class="panel-footer">
@@ -39,4 +39,25 @@
     </div><!-- EOF container -->
   </section><!-- EOF section -->
 <?php endif; ?>
+
+  <section>
+    <div class="container">
+      <?php if(have_posts()): ?>
+        <?php while(have_posts()): the_post(); ?>
+          <div class="row">
+            <div class="col-xs-12">
+              <?php the_title('<h1>','</h1>'); ?>
+              <?php the_content(); ?>
+            </div><!-- EOF col-xs-12 -->
+          </div><!-- EOF row -->
+        <?php endwhile; ?>
+      <?php else: ?>
+        <div class="row">
+          <div class="col-xs-12">
+            <p>Pas de résultats.</p>
+          </div><!-- EOF col-xs-12 -->
+        </div><!-- EOF row -->
+      <?php endif; ?>
+    </div><!-- EOF container -->
+  </section>
 <?php get_footer(); ?>

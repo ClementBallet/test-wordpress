@@ -14,6 +14,7 @@
         </div>
       </div>
     <?php endif; ?>
+    <?php wp_pagenavi(); ?><!-- Ajout de l'extension WP-pagenavi pour naviguer depuis la page d'accueil -->
   </div><!-- EOF container -->
 </section><!-- EOF section -->
 

@@ -104,6 +104,24 @@ function cl_admin_menus() {
 
 add_action('admin_menu', 'cl_admin_menus');
 
+/**
+ *    Sidebars et widget
+ */
+
+function cl_widgets_init() {
+  register_sidebar(array(
+    'name'          => 'Footer Widget Zone',
+    'description'   => 'Widget affichés dans le footer : 4 au maximum',
+    'id'            => 'widgetized-footer',
+    'before_widget' => '<div id="%1$s" class="col-xs-12 col-sm-12 col-md-3 wrap-widget %2$s"><div class="inside-widget">',
+    'after_widget'  => '</div></div>',
+    'before_title'  => '<h2 class="h3 text-center">',
+    'after_title'   => '</h2>'
+  ));
+}
+
+add_action('widgets_init', 'cl_widgets_init');
+
  /**
   *
   *   Utilitaires
@@ -127,6 +145,20 @@ function cl_setup() {
 
 add_action('after_setup_theme', 'cl_setup');
 
+/**
+ *    Ajoute la taille medium large dans la sélection d'image
+ */
+
+function my_images_sizes($sizes) {
+  $addsizes = array (
+    "medium_large" => "Medium Large"
+  );
+  $newsizes = array_merge($sizes, $addsizes);
+  return $newsizes;
+}
+
+add_filter('image_size_names_choose', 'my_images_sizes');
+
  /**
   *  Affichage date + catégorie
   *
@@ -140,7 +172,9 @@ function cl_give_me_meta_01($date1, $date2, $cat, $tags) {
   $chaine .= $date2;
   $chaine .= '</time> dans la catégorie ';
   $chaine .= $cat;
-  $chaine .= ' avec les étiquettes : '. $tags;
+  if(strlen($tags) > 0):
+    $chaine .= ' avec les étiquettes : '. $tags;
+  endif;
 
   return $chaine;
 }

@@ -10,6 +10,9 @@
 
     // Sauvegarde légende
     $opts['legend_01'] = sanitize_text_field($_POST["cl_legend_01"]);
+    // Sauvegarde image
+    $opts['image_01_url'] = sanitize_text_field($_POST["cl_image_url_01"]);
+
     // Connexion bdd
     update_option('cl_opts', $opts);
 

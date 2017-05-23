@@ -31,7 +31,7 @@
             <h1 class="h2">Image du logo en page d'accueil (haut de page)</h1>
             <div class="row">
               <div class="col-lg-5">
-                <img style="margin-bottom:20px;" id="img-preview-01" src="<?php echo $theme_opts['image_01_url']; ?>" class="img-responsive img-thumbnail" alt="">
+                <img style="margin-bottom:20px;" id="img_preview_01" src="<?php echo $theme_opts['image_01_url']; ?>" class="img-responsive img-thumbnail" alt="">
               </div>
               <div class="col-lg-6 col-lg-offset-1">
                 <button class="btn btn-primary btn-lg btn-select-img" type="button" id="btn_img_01">Choisir une image pour le logo</button>
@@ -40,7 +40,8 @@
             <div class="form-group">
               <label for="cl_image_01" class="col-sm-2 control-label">Image sauvegardée</label>
               <div class="col-sm-10">
-                <input type="text" width="300px" id="cl_image_01" name="cl_image_01" value="<?php echo $theme_opts['image_01_url']; ?>" style="width:100%;"/>
+                <input type="text" width="300px" id="cl_image_01" name="cl_image_01" disabled value="<?php echo $theme_opts['image_01_url']; ?>" style="width:100%;"/>
+                <input type="hidden" width="300px" id="cl_image_url_01" name="cl_image_url_01" value="<?php echo $theme_opts['image_01_url']; ?>" style="width:100%;"/>
               </div>
             </div><!-- EOF form-group -->
           </div><!-- EOF col-xs-12 -->
