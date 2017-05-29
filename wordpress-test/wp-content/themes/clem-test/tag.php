@@ -7,9 +7,9 @@
           <p class="lead">Liste des articles avec l'étiquette <?php single_tag_title(''); ?></p>
         </div>
       </div><!-- EOF row -->
-      <?php if(have_posts()): ?> <!-- Boucle qui vérifie l'existence d'articles -->
-        <?php while(have_posts()): the_post(); // Invoque l'itération de l'article en cours ?>
-          <?php get_template_part('content') // Appel de content.php ?>
+      <?php if(have_posts()): ?><!-- Boucle qui vérifie l'existence d'articles -->
+        <?php while(have_posts()): the_post(); ?><!-- Invoque l'itération de l'article en cours -->
+          <?php get_template_part('content') ?><!-- Appel de content.php -->
         <?php endwhile; ?><!-- EOF while boucle posts -->
       <?php else: ?>
         <div class="row">

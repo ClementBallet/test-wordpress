@@ -11,7 +11,7 @@
  * Permet de ne pas avoir à le changer manuellement dans fonctions à chaque changement de version.
  */
 
-define('CL_VERSION','1.1.0');
+define('CL_VERSION','1.2.3');
 
 /**
  * Fonction wp_enqueue_style() qui appelle les feuilles de styles.
@@ -36,12 +36,16 @@ function cl_scripts(){
   // Chargement des styles
   wp_enqueue_style('cl_bootstrap-core', get_template_directory_uri().'/css/bootstrap.min.css', array(), CL_VERSION, 'all');
 
-  wp_enqueue_style('cl_custom', get_template_directory_uri().'/style.css', array(), CL_VERSION, 'all');
+  wp_enqueue_style('cl_animate', get_template_directory_uri().'/css/animate.min.css', array(), CL_VERSION, 'all');
+
+  wp_enqueue_style('cl_custom', get_template_directory_uri().'/style.css', array('cl_bootstrap-core', 'cl_animate'), CL_VERSION, 'all');
 
   // Chargement des scripts
-  wp_enqueue_script('bootstrap-js', get_template_directory_uri().'/js/bootstrap.min.js', array('jquery', 'tether-js'), CL_VERSION, true);
+  wp_enqueue_script('jquery-js', get_template_directory_uri().'/js/jquery.min.js', array(), CL_VERSION, true);
 
-  wp_enqueue_script('cl_script', get_template_directory_uri().'/js/clem-test.js', array('jquery', 'bootstrap-js'), CL_VERSION, true);
+  wp_enqueue_script('bootstrap-js', get_template_directory_uri().'/js/bootstrap.min.js', array('jquery-js'), CL_VERSION, true);
+
+  wp_enqueue_script('cl_script', get_template_directory_uri().'/js/clem-test.js', array('jquery-js', 'bootstrap-js'), CL_VERSION, true);
 }
 
 add_action('wp_enqueue_scripts', 'cl_scripts');
@@ -53,13 +57,16 @@ add_action('wp_enqueue_scripts', 'cl_scripts');
 function cl_admin_init() {
   // Action 1
   function cl_admin_scripts() {
+    // Enlève le style bootstrap dans les réglages du thème, notamment pour la balise code qui s'affiche en rouge.
+    if(!isset($_GET['page']) || $_GET['page'] != "cl_theme_opts") {
+      return;
+    }
     // Chargement des styles admin
-    wp_enqueue_style('cl_admin_bootstrap-core', get_template_directory_uri() . '/css/bootstrap.min.css', array(), CL_VERSION, 'all');
-
+    wp_enqueue_style('cl_admin_bootstrap-core', get_template_directory_uri().'/css/bootstrap.min.css', array(), CL_VERSION, 'all');
     // Chargement des scripts admin
     wp_enqueue_media();  // Inclusion du media uploader de WP
-    wp_enqueue_script('cl_admin_init', get_template_directory_uri() . '/js/admin-options.js', array(), CL_VERSION, true);
-  }
+    wp_enqueue_script('cl_admin_init', get_template_directory_uri().'/js/admin-options.js', array(), CL_VERSION, true);
+  } // Fin cl_admin_scripts()
 
   add_action('admin_enqueue_scripts', 'cl_admin_scripts');
 

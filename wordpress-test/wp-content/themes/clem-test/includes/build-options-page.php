@@ -6,6 +6,7 @@
 
   function cl_build_options_page() {
     $theme_opts = get_option('cl_opts');
+
 ?>
 
     <div class="wrap">
@@ -48,7 +49,7 @@
 
           <div class="col-xs-12">
             <div class="form-group">
-              <label for="cl_legend_01" class="col-sm-2" control-label>Légende</label>
+              <label for="cl_legend_01" class="col-sm-2 control-label">Légende</label>
               <div class="col-sm-10">
                 <input type="text" id="cl_legend_01" name="cl_legend_01" value="<?php echo $theme_opts['legend_01']; ?>" style="width:100%;">
               </div>

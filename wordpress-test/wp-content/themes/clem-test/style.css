@@ -37,6 +37,20 @@ dl.gallery-item img.attachment-thumbnail {
   padding-bottom: 12px;
 }
 
+/* Textes du carousel */
+.carousel-inner .item h3 {
+  animation-delay: 0.4s;
+  font-size: 2.2em;
+  font-weight: bold;
+}
+
+.carousel-inner .item p {
+  animation-delay: 1s;  
+  font-size: 1.2em;
+  background-color: rgba(0, 0, 0, 0.35);
+  padding: 10px 3%;
+}
+
 footer {
   background-color: #CDDDC4;
   margin-top: 20px;

@@ -7,9 +7,7 @@
           <?php while(have_posts()): the_post(); // Invoque l'itération de l'article en cours ?>
             <div class="row m-dw-30">
               <div class="col-xs-12">
-                <h1>
-                  <?php the_title(); ?><!-- Affiche le titre de l'article -->
-                </h1>
+                <h1><?php the_title(); ?></h1><!-- Affiche le titre de l'article -->
                 <p>
                   <?php
                     echo cl_give_me_meta_01(

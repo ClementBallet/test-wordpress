@@ -11,62 +11,59 @@
   if($slider_query->have_posts()):
 ?>
 
-  <section class="m-dw-30">
-    <div class="container">
-      <div id="slider-01" class="carousel slide" data-ride="carousel"><!-- BOF CAROUSEL -->
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-          <?php
-            $indicator_index = 0;
+    <section class="m-dw-30">
+      <div class="container">
+        <div id="slider-01" class="carousel slide"><!-- BOF CAROUSEL (pour remettre le js de bootstrap, rajouter data-ride="carousel")-->
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <?php
+              while($slider_query->have_posts()) : $slider_query->the_post();
+                echo '<li data-target="#slider-01" data-slide-to="'.$slider_query->current_post.'" class="'. ($slider_query->current_post == 0 ? "active" : "") .'"></li>';
+            ?>
+            <?php
+              endwhile;
+            ?>
+          </ol>
 
-            while($slider_query->have_posts()) : $slider_query->the_post();
-              echo '<li data-target="#slider-01" data-slide-to="'. $indicator_index .'" class="'. ($indicator_index == 0 ? "active" : "") .'"></li>';
-          ?>
-            <!-- <li data-target="#slider-01" data-slide-to="0"></li>
-            <li data-target="#slider-01" data-slide-to="1"></li>
-            <li data-target="#slider-01" data-slide-to="2"></li>
-            <li data-target="#slider-01" data-slide-to="3"></li> -->
-          <?php $indicator_index++;
-          endwhile; ?>
-        </ol>
+          <?php rewind_posts(); ?>
 
-        <?php rewind_posts(); ?>
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner" role="listbox">
+            <?php
+              while($slider_query->have_posts()) : $slider_query->the_post();
 
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-          <?php
-            $active_test = true;
-            while($slider_query->have_posts()) : $slider_query->the_post();
-              if($active_test) {
-                $theclass = " active";
-              } else {
-                $theclass = "";
-              }
-          ?>
-            <div class="item<?php echo ?>">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/aa/img1.jpg" alt="">
-              <div class="carousel-caption">
-                ...
-              </div>
-            </div>
-          <?php
-            $active_test = false;
-            endwhile;
-            wp_reset_postdata();
-          ?>
-        </div><!-- EOF wrapper -->
+                if($thumbnail_html = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'front-slider')):
+                  $thumbnail_src = $thumbnail_html['0'];
+                  $alt_val = get_post_meta(get_post_thumbnail_id($post->ID), '_wp_attachment_image_alt');
+                  $alt_val = $alt_val[0];
+            ?>
+                  <div class="item<?php echo ($slider_query->current_post == 0 ? " active" : ""); ?>">
+                    <img src="<?php echo $thumbnail_src; ?>" alt="<?php echo $alt_val; ?>">
+                    <div class="carousel-caption">
+                      <h3 data-animation="animated bounceInDown"><?php the_title(); ?></h3>
+                      <p data-animation="animated bounceInDown"><?php the_field('sous_titre'); ?></p>
+                    </div>
+                  </div>
+            <?php
+                endif;
+              endwhile;
+              wp_reset_postdata();
+            ?>
+          </div><!-- EOF wrapper -->
 
-        <!-- Controls -->
-        <a class="left carousel-control" href="#slider-01" role="button" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#slider-01" role="button" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div><!-- EOF CAROUSEL -->
-    </div>
-  </section>
+          <!-- Controls -->
+          <a class="left carousel-control" href="#slider-01" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control" href="#slider-01" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div><!-- EOF CAROUSEL -->
+      </div>
+    </section>
 
-<?php endif; ?>
+<?php
+  endif;
+?>
