@@ -11,9 +11,9 @@
   if($slider_query->have_posts()):
 ?>
 
-    <section class="m-dw-30">
+    <section class="m-dw-30"><!-- BOF CAROUSEL -->
       <div class="container">
-        <div id="slider-01" class="carousel slide"><!-- BOF CAROUSEL (pour remettre le js de bootstrap, rajouter data-ride="carousel")-->
+        <div id="slider-01" class="carousel slide"><!-- Pour remettre le js de bootstrap, rajouter data-ride="carousel"-->
           <!-- Indicators -->
           <ol class="carousel-indicators">
             <?php

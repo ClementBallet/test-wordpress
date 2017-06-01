@@ -14,5 +14,4 @@
       <?php endif; ?>
     </div><!-- EOF container -->
   </section>
-<?php //get_sidebar(); ?>
 <?php get_footer(); ?>

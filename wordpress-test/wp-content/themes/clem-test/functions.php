@@ -179,7 +179,8 @@ function cl_give_me_meta_01($date1, $date2, $cat, $tags) {
   $chaine .= $date1;
   $chaine .= '">';
   $chaine .= $date2;
-  $chaine .= '</time> dans la catégorie ';
+  $chaine .= '</time>';
+  $chaine .= ' dans la catégorie ';
   $chaine .= $cat;
   if(strlen($tags) > 0):
     $chaine .= ' avec les étiquettes : '. $tags;
@@ -204,7 +205,7 @@ add_filter('excerpt_more', 'cl_excerpt_more');
 
 function cl_slider_init() {
   $labels = array( // Personnalisation des labels du Carousel dans le panneau admin
-    'name'               => 'Images Carousel Accueil',
+    'name'               => 'Carousel Slideshow',
     'singular_name'      => 'Image accueil',
     'add_new'            => 'Ajouter une image',
     'add_new_item'       => 'Ajouter une image accueil',
@@ -215,7 +216,7 @@ function cl_slider_init() {
     'search_item'        => 'Chercher une image accueil',
     'not_found'          => 'Aucun élément trouvé',
     'not_found_in_trash' => 'Aucun élément dans la corbeille',
-    'menu_name'          => 'Slider Frontal'
+    'menu_name'          => 'Carousel Slideshow'
   );
 
   $args = array(
@@ -281,3 +282,114 @@ function cl_change_slides_order($query) {
 }
 
 add_action('pre_get_posts', 'cl_change_slides_order');
+
+
+
+function remove_img_attributes( $html ) {
+$html = preg_replace( '/(width|height|srcset)=".*"\s/', "", $html );
+return $html;
+}
+
+/**
+ *   Ajout d'un shortcode pour un slider
+ */
+
+function cl_slider_shortcode($param, $content) {
+
+  //var_dump($content);
+
+
+  preg_match("/<img.*\/>/", $content, $images);
+  preg_match("/title\](.+)\[\/title/", $content, $titles);
+  preg_match("/subtitle\](.+)\[\/subtitle/", $content, $subtitles);
+  preg_match("/button\](.+)\[\/button/", $content, $button_labels);
+
+
+  $title = $titles[1];
+  $subtitle = $subtitles[1];
+  $button_label = $button_labels[1];
+
+  var_dump($images[0]);
+  var_dump($title);
+  var_dump($subtitle);
+  var_dump($button_label);
+
+  function slide_title($title) {
+    if(sizeof($title) != 0) {
+      return $title;
+    }
+  }
+
+  function slide_subtitle($subtitle) {
+    if(sizeof($subtitle) != 0) {
+      return $subtitle;
+    }
+  }
+
+  function slide_button_label($button_label) {
+    if(sizeof($button_label) != 0) {
+      return $button_label;
+    }
+  }
+?>
+  <section class="m-dw-30"><!-- BOF CAROUSEL -->
+    <div class="container">
+      <div id="slider-02" class="carousel slide"><!-- Pour remettre le js de bootstrap, rajouter data-ride="carousel"-->
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <?php
+          for($i = 0; $i < sizeof($imgs); $i++) :
+            $active = '';
+            if($i == 0) :
+              $active = 'active';
+            endif;
+            echo '<li data-target="#slider-01" data-slide-to="'.$i.'" class="'.$active.'"></li>';
+          endfor;
+          ?>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+          <?php
+          for($i = 0; $i < sizeof($imgs); $i++) :
+            $active = '';
+            if($i == 0) :
+              $active = 'active';
+            endif;
+
+            $img = remove_img_attributes($imgs[$i]);
+            $doc = new DOMDocument();
+            $doc->loadHTML($img);
+            $src = $doc->getElementsByTagName('img')[0]->getAttribute('src');
+          ?>
+            <div class="item <?php echo $active; ?>">
+              <div style="background-image:url(<?php echo $src; ?>); background-size: cover; width:1140px; height:420px;"></div>
+              <div class="carousel-caption">
+                <h3 data-animation="animated bounceInDown"><?php echo slide_title($title); ?></h3>
+                <p data-animation="animated bounceInDown"><?php echo slide_subtitle($subtitle); ?></p>
+                <button type="button" class="btn btn-primary"><?php echo slide_button_label($button_label); ?></button>
+              </div>
+            </div>
+        <?php
+          endfor; 
+        ?>
+        </div><!-- EOF wrapper -->
+        <!-- Controls -->
+        <a class="left carousel-control" href="#slider-02" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#slider-02" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div><!-- EOF slider-02 -->
+    </div><!-- EOF CONTAINER -->
+  </section><!-- EOF CAROUSEL -->
+<?php
+
+}
+
+add_shortcode('slideshow', 'cl_slider_shortcode');
+
+?>
