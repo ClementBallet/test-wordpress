@@ -11,7 +11,7 @@
  * Permet de ne pas avoir à le changer manuellement dans fonctions à chaque changement de version.
  */
 
-define('CL_VERSION','1.2.3');
+define('CL_VERSION','1.2.4');
 
 /**
  * Fonction wp_enqueue_style() qui appelle les feuilles de styles.
@@ -284,35 +284,62 @@ function cl_change_slides_order($query) {
 add_action('pre_get_posts', 'cl_change_slides_order');
 
 
+/**
+ * [remove_img_attributes description]
+ *
+ * Retire les attributs width, height et srcset de la variable $content pour le slideshow
+ */
 
 function remove_img_attributes( $html ) {
-$html = preg_replace( '/(width|height|srcset)=".*"\s/', "", $html );
-return $html;
+  $html = preg_replace( '/(width|height|srcset)=".*"\s/', "", $html );
+  return $html;
+}
+
+/**
+ * [remove_slides_attr description]
+ *
+ * Retire les balises <p> et les caractères invisibles de la variable $content pour la balise slide du slideshow
+ */
+
+function remove_slides_attr($content) {
+  $content = remove_img_attributes($content);
+  $content = str_replace('<p>', '', $content);
+  $content = str_replace('</p>', '', $content);
+  $content = preg_replace("#\n|\t|\r#", "", $content);
+  return $content;
 }
 
 /**
  *   Ajout d'un shortcode pour un slider
+ *
+ *   Forme finale du shortcode : [slideshow][slide][title]...[/title][subtitle]...[/subtitle][button]...[/button][/slide][/slideshow]
+ *   La balise [slide][/slide] est à renouveller autant de fois que le slideshow aura de photos.
+ *   Insérer chaque photo après la balise [slide] via "Ajouter un média" dans l'admin de Wordpress.
  */
 
 function cl_slider_shortcode($param, $content) {
 
+  $slides_content = remove_slides_attr($content);
+  //var_dump($slides_content);
   //var_dump($content);
 
-
-  preg_match("/<img.*\/>/", $content, $images);
+  preg_match_all("/<img(.+)\/>/", $content, $images);
+  preg_match("/slide\](.+)\[\/slide/", $slides_content, $slides);
   preg_match("/title\](.+)\[\/title/", $content, $titles);
   preg_match("/subtitle\](.+)\[\/subtitle/", $content, $subtitles);
   preg_match("/button\](.+)\[\/button/", $content, $button_labels);
 
-
+  $imgs = $images[0];
+  $slide = explode("/slide", $slides[0]);
+  //var_dump($slide);
   $title = $titles[1];
   $subtitle = $subtitles[1];
   $button_label = $button_labels[1];
 
-  var_dump($images[0]);
-  var_dump($title);
-  var_dump($subtitle);
-  var_dump($button_label);
+  // var_dump(remove_img_attributes($imgs));
+  // var_dump($title);
+  // var_dump($subtitle);
+  // var_dump($button_label);
 
   function slide_title($title) {
     if(sizeof($title) != 0) {
@@ -338,7 +365,7 @@ function cl_slider_shortcode($param, $content) {
         <!-- Indicators -->
         <ol class="carousel-indicators">
           <?php
-          for($i = 0; $i < sizeof($imgs); $i++) :
+          for($i = 0; $i < sizeof($slide); $i++) :
             $active = '';
             if($i == 0) :
               $active = 'active';
@@ -351,27 +378,34 @@ function cl_slider_shortcode($param, $content) {
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
           <?php
-          for($i = 0; $i < sizeof($imgs); $i++) :
+          for($i = 0; $i < sizeof($slide); $i++) :
             $active = '';
+
             if($i == 0) :
               $active = 'active';
             endif;
 
-            $img = remove_img_attributes($imgs[$i]);
-            $doc = new DOMDocument();
-            $doc->loadHTML($img);
-            $src = $doc->getElementsByTagName('img')[0]->getAttribute('src');
+            for($j = 0; $j < sizeof($imgs); $j++) :
+              var_dump($imgs[j]);
+              $img = remove_img_attributes($imgs[j]);
+              var_dump($img);
+              $doc = new DOMDocument();
+              $doc->loadHTML($img);
+              var_dump($img);
+              $src = $doc->getElementsByTagName('img')->getAttribute('src');
+              var_dump($src);
+            endfor;
           ?>
             <div class="item <?php echo $active; ?>">
               <div style="background-image:url(<?php echo $src; ?>); background-size: cover; width:1140px; height:420px;"></div>
               <div class="carousel-caption">
-                <h3 data-animation="animated bounceInDown"><?php echo slide_title($title); ?></h3>
-                <p data-animation="animated bounceInDown"><?php echo slide_subtitle($subtitle); ?></p>
-                <button type="button" class="btn btn-primary"><?php echo slide_button_label($button_label); ?></button>
+                  <h3 data-animation="animated bounceInDown"><?php echo slide_title($title); ?></h3>
+                  <p data-animation="animated bounceInDown"><?php echo slide_subtitle($subtitle); ?></p>
+                  <button type="button" class="btn btn-primary"><?php echo slide_button_label($button_label); ?></button>
               </div>
             </div>
         <?php
-          endfor; 
+          endfor;
         ?>
         </div><!-- EOF wrapper -->
         <!-- Controls -->
